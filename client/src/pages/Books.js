@@ -13,25 +13,25 @@ function Books() {
   const [formObject, setFormObject] = useState({})
 
   // Load all books and store them with setBooks
-  useEffect(() => {
-    loadBooks()
-  }, [])
+  // useEffect(() => {
+  //   loadBooks()
+  // }, [])
 
-  // Loads all books and sets them to books
-  function loadBooks() {
-    API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
-  };
+  // // Loads all books and sets them to books
+  // function loadBooks() {
+  //   API.getBooks()
+  //     .then(res => 
+  //       setBooks(res.data)
+  //     )
+  //     .catch(err => console.log(err));
+  // };
 
   // Deletes a book from the database with a given id, then reloads books from the db
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
+  // function deleteBook(id) {
+  //   API.deleteBook(id)
+  //     .then(res => loadBooks())
+  //     .catch(err => console.log(err));
+  // }
 
   // Handles updating component state when the user types into the input field
   function handleInputChange(event) {
@@ -59,9 +59,9 @@ function handleFormSubmit(event) {
     console.log(formObject.book)
     search = search.split(' ')
     search = search.join('')
-    console.log(search)
+    // console.log(search)
       API.searchBooks(search)
-        // .then((res) =>  console.log(res.data.items))
+        // .then(res =>  console.log(res.data.items[0].volumeInfo.imageLinks.smallThumbnail))
         .then(res =>  setBooks(res.data.items))
         .catch(err => console.log(err));
     
@@ -96,17 +96,26 @@ function handleFormSubmit(event) {
             {books.length ? (
               <List>
                 {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        Title:{book.volumeInfo.title}
-                        Author(s):{book.volumeInfo.authors}
-                        Description:{book.volumeInfo.desription}
-                        Image: <img src={book.volumeInfo.imageLinks.thumbnail} alt={book._id}></img>
-                        Link: <a href={book.selfLink}>{book.selfLink}</a>
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
+                  <ListItem key={book.id}>
+                     <div >
+                     <Row>
+                     <Col size="3">
+                        {book.volumeInfo.imageLinks ? (
+                        <img src={book.volumeInfo.imageLinks.smallThumbnail} alt="cover image" />
+                        ): <div></div>
+                        }
+                            </Col>
+                        <Col size="9">
+                        <strong>Title: </strong>{book.volumeInfo.title}
+                        <br></br>
+                        <strong>Author(s): </strong>{book.volumeInfo.authors}
+                        <br></br>
+                        <strong>Description: </strong>{book.volumeInfo.description}
+                        <br></br>
+                        <strong>Link: </strong><a href={book.volumeInfo.infoLink}>{book.selfLink}</a>
+                        </Col>
+                        </Row>
+                      </div>
                   </ListItem>
                 ))}
               </List>
