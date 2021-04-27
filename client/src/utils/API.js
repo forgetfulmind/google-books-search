@@ -18,9 +18,7 @@ export default {
     return axios.post("/api/books", bookData);
   },
   searchBooks: function(bookData){
-    return axios.get(`https://www.googleapis.com/books/v1/volumes?q=${bookData}&key=${REACT_APP_BOOKS_API}`)
-  },
-  getAPI: function() {
-    return axios.get("/api/books/key");
+
+    return axios.get(`https://www.googleapis.com/books/v1/volumes?q=${bookData}&key=${process.env.REACT_APP_BOOKS_API}`)
   },
 };
