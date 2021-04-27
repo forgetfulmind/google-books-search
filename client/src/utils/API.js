@@ -1,4 +1,5 @@
 import axios from "axios";
+let leg = process.env.REACT_APP_BOOKS_API
 
 export default {
   // Gets all books
@@ -18,6 +19,6 @@ export default {
     return axios.post("/api/books", bookData);
   },
   searchBooks: function(bookData){
-    return axios.get(`https://www.googleapis.com/books/v1/volumes?q=${bookData}&key=${process.env.REACT_APP_BOOKS_API}`)
+    return axios.get(`https://www.googleapis.com/books/v1/volumes?q=${bookData}&key=${leg}`)
   }
 };
