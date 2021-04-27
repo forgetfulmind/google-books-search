@@ -25,6 +25,22 @@ function Books() {
   //     )
   //     .catch(err => console.log(err));
   // };
+function saveBook (event){
+  console.log(books)
+  console.log(event.target)
+  let chosenOne = books.filter(book => book.id === event.target.id)
+  console.log(chosenOne[0].volumeInfo.authors)
+  API.saveBook({
+            title: chosenOne[0].volumeInfo.title,
+            authors: chosenOne[0].volumeInfo.authors,
+            description: chosenOne[0].volumeInfo.description,
+            image: chosenOne[0].volumeInfo.imageLinks.smallThumbnail,
+            link: chosenOne[0].volumeInfo.infoLink
+          })
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+        }
+
 
   // Deletes a book from the database with a given id, then reloads books from the db
   // function deleteBook(id) {
@@ -59,7 +75,7 @@ function handleFormSubmit(event) {
     console.log(formObject.book)
     search = search.split(' ')
     search = search.join('')
-    // console.log(search)
+    console.log(search)
       API.searchBooks(search)
         // .then(res =>  console.log(res.data.items[0].volumeInfo.imageLinks.smallThumbnail))
         .then(res =>  setBooks(res.data.items))
@@ -67,14 +83,18 @@ function handleFormSubmit(event) {
     
   };
 
+  function authors(authArry){
+    console.log(authArry)  
+    if (authArry){
+      return authArry.toString("")
+    }
+  }
+
 
     return (
       <Container fluid>
         <Row>
           <Col size="md-6">
-            {/* <Jumbotron>
-              <h1>What Books Should I Read?</h1>
-            </Jumbotron> */}
             <form>
               <Input
                 onChange={handleInputChange}
@@ -90,9 +110,6 @@ function handleFormSubmit(event) {
             </form>
           </Col>
           <Col size="md-6 sm-12">
-            {/* <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron> */}
             {books.length ? (
               <List>
                 {books.map(book => (
@@ -108,12 +125,18 @@ function handleFormSubmit(event) {
                         <Col size="9">
                         <strong>Title: </strong>{book.volumeInfo.title}
                         <br></br>
-                        <strong>Author(s): </strong>{book.volumeInfo.authors}
+                        <strong>Author(s): </strong>{authors(book.volumeInfo.authors)}
                         <br></br>
                         <strong>Description: </strong>{book.volumeInfo.description}
                         <br></br>
                         <strong>Link: </strong><a href={book.volumeInfo.infoLink}>{book.selfLink}</a>
                         </Col>
+                        <FormBtn
+                          id={book.id}
+                          onClick={e => saveBook(e)}
+                          >
+                         Save Book
+                        </FormBtn>
                         </Row>
                       </div>
                   </ListItem>
